@@ -34,13 +34,13 @@ namespace HuntAndPeck.ViewModels
 
             keyListener1.HotKey = new HotKey
             {
-                Keys = Keys.OemSemicolon,
+                Keys = Keys.F13,
                 Modifier = KeyModifier.Alt
             };
 
             keyListener1.TaskbarHotKey = new HotKey
             {
-                Keys = Keys.OemSemicolon,
+                Keys = Keys.F13,
                 Modifier = KeyModifier.Control
             };
 
