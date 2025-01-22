@@ -12,8 +12,7 @@
     Loaded="OverlayView_OnLoaded"
     PreviewKeyDown="OverlayView_OnPreviewKeyDown">
     <local:ForegroundWindow.Resources>
-        <Style x:Key="HintStyle" TargetType="TextBlock">
-            <Setter Property="Background" Value="Yellow" />
+        <Style x:Key="HintStyle" TargetType="Viewbox">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Active}" Value="false">
                     <Setter Property="Visibility" Value="Hidden" />
@@ -48,14 +47,26 @@
                                 <SolidColorBrush Color="Yellow" Opacity="0.05" />
                             </Rectangle.Fill>
                         </Rectangle>-->
-                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1 1 0 0" Width="{Binding Hint.BoundingRectangle.Width}" Height="{Binding Hint.BoundingRectangle.Height}">
-                            <TextBlock Text="{Binding Label}" FontFamily="Helvetica, Arial" FontWeight="Bold" FontSize="{Binding FontSizeReadValue}" Style="{StaticResource HintStyle}">
-                            </TextBlock>
+                        <Viewbox StretchDirection="DownOnly"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Top"
+                                 Margin="1 1 0 0" 
+                                 Width="{Binding Hint.BoundingRectangle.Width}"
+                                 Height="{Binding Hint.BoundingRectangle.Height}"
+                                 Style="{StaticResource HintStyle}">
+                            <Border CornerRadius="5" BorderThickness="2" BorderBrush="Black" Background="Yellow">
+                                <TextBlock Text="{Binding Label}" 
+                                       FontFamily="Helvetica, Arial"
+                                       FontWeight="Bold"
+                                       FontSize="{Binding FontSizeReadValue}"
+                                       Padding="3">
+                                </TextBlock>
+                            </Border>
                         </Viewbox>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        </Grid>
+    </Grid>
 </local:ForegroundWindow>
 
