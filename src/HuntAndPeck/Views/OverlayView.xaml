@@ -16,7 +16,7 @@
             <Setter Property="Background" Value="Yellow" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Active}" Value="false">
-                    <Setter Property="Background" Value="LightYellow" />
+                    <Setter Property="Visibility" Value="Hidden" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
