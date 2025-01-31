@@ -9,31 +9,154 @@
 //------------------------------------------------------------------------------
 
 namespace HuntAndPeck.Properties {
-
-
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.11.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
+        
         public static Settings Default {
             get {
                 return defaultInstance;
             }
         }
-
-    [global::System.Configuration.UserScopedSettingAttribute()]
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Configuration.DefaultSettingValueAttribute("14")]
-    public string FontSize {
-        get {
-            return ((string)(this["FontSize"]));
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        public string FontSize {
+            get {
+                return ((string)(this["FontSize"]));
+            }
+            set {
+                this["FontSize"] = value;
+            }
         }
-        set {
-            this["FontSize"] = value;
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0x20")]
+        public string HotKey {
+            get {
+                return ((string)(this["HotKey"]));
+            }
+            set {
+                this["HotKey"] = value;
+            }
         }
-    }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HotKeyShift {
+            get {
+                return ((bool)(this["HotKeyShift"]));
+            }
+            set {
+                this["HotKeyShift"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HotKeyCtrl {
+            get {
+                return ((bool)(this["HotKeyCtrl"]));
+            }
+            set {
+                this["HotKeyCtrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HotKeyAlt {
+            get {
+                return ((bool)(this["HotKeyAlt"]));
+            }
+            set {
+                this["HotKeyAlt"] = value;
+            }
+        }
 
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HotKeyWin
+        {
+            get
+            {
+                return ((bool)(this["HotKeyWin"]));
+            }
+            set
+            {
+                this["HotKeyWin"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0xD")]
+        public string TaskbarHotKey {
+            get {
+                return ((string)(this["TaskbarHotKey"]));
+            }
+            set {
+                this["TaskbarHotKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TaskbarHotKeyShift {
+            get {
+                return ((bool)(this["TaskbarHotKeyShift"]));
+            }
+            set {
+                this["TaskbarHotKeyShift"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TaskbarHotKeyCtrl {
+            get {
+                return ((bool)(this["TaskbarHotKeyCtrl"]));
+            }
+            set {
+                this["TaskbarHotKeyCtrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TaskbarHotKeyAlt {
+            get {
+                return ((bool)(this["TaskbarHotKeyAlt"]));
+            }
+            set {
+                this["TaskbarHotKeyAlt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TaskbarHotKeyWin {
+            get {
+                return ((bool)(this["TaskbarHotKeyWin"]));
+            }
+            set {
+                this["TaskbarHotKeyWin"] = value;
+            }
+        }
     }
 }

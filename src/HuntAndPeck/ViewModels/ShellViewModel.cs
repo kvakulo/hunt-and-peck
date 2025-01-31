@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using HuntAndPeck.NativeMethods;
+using HuntAndPeck.Properties;
 using HuntAndPeck.Services.Interfaces;
 using Application = System.Windows.Application;
 
@@ -32,11 +35,14 @@ namespace HuntAndPeck.ViewModels
             var keyListener1 = keyListener;
             _hintProviderService = hintProviderService;
             _debugHintProviderService = debugHintProviderService;
+            int keyValue = 0x20;
+            string hotKeyString = Settings.Default.HotKey.StartsWith("0x") ? Settings.Default.HotKey.Substring(2) : Settings.Default.HotKey;
+            int.TryParse(hotKeyString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out keyValue);
 
             keyListener1.HotKey = new HotKey
             {
-                Keys = Keys.U,
-                Modifier = KeyModifier.Alt
+                Keys = (Keys)keyValue,
+                Modifier = GetKeyModifier(Settings.Default.HotKeyAlt, Settings.Default.HotKeyCtrl, Settings.Default.HotKeyShift, Settings.Default.HotKeyWin)
             };
 
             keyListener1.LeveledHotKeys = new List<HotKey>
@@ -80,10 +86,12 @@ namespace HuntAndPeck.ViewModels
 
             };
 
+            string taskbarHotKeyString = Settings.Default.TaskbarHotKey.StartsWith("0x") ? Settings.Default.TaskbarHotKey.Substring(2) : Settings.Default.TaskbarHotKey;
+            int.TryParse(taskbarHotKeyString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out keyValue);
             keyListener1.TaskbarHotKey = new HotKey
             {
-                Keys = Keys.Y,
-                Modifier = KeyModifier.Control
+                Keys = (Keys)keyValue,
+                Modifier = GetKeyModifier(Settings.Default.TaskbarHotKeyAlt, Settings.Default.TaskbarHotKeyCtrl, Settings.Default.TaskbarHotKeyShift, Settings.Default.TaskbarHotKeyWin)
             };
 
 #if DEBUG
@@ -101,7 +109,24 @@ namespace HuntAndPeck.ViewModels
             ShowOptionsCommand = new DelegateCommand(ShowOptions);
             ExitCommand = new DelegateCommand(Exit);
         }
+        private KeyModifier GetKeyModifier(bool alt, bool ctrl, bool shift, bool windows = false)
+        {
+            KeyModifier modifier = 0;
 
+            if (alt)
+                modifier |= KeyModifier.Alt;
+
+            if (ctrl)
+                modifier |= KeyModifier.Control;
+
+            if (shift)
+                modifier |= KeyModifier.Shift;
+
+            if (windows)
+                modifier |= KeyModifier.Windows;
+
+            return modifier;
+        }
         public DelegateCommand ShowOptionsCommand { get; }
         public DelegateCommand ExitCommand { get; }
 

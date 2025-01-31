@@ -1,11 +1,39 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HuntAndPeck.Properties" GeneratedClassName="Settings">
+  <Profiles />
   <Settings>
     <Setting Name="FontSize" Type="System.String" Scope="User">
       <Value Profile="(Default)">14</Value>
+    </Setting>
+    <Setting Name="HotKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0x20</Value>
+    </Setting>
+    <Setting Name="HotKeyShift" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="HotKeyCtrl" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="HotKeyAlt" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="TaskbarHotKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0xD</Value>
+    </Setting>
+    <Setting Name="TaskbarHotKeyShift" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="TaskbarHotKeyCtrl" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="TaskbarHotKeyAlt" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="HotKeyWin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="TaskbarHotKeyWin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
