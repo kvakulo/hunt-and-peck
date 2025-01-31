@@ -15,11 +15,29 @@
         </TabItem>
         <TabItem Header="Keyboard">
             <TabItem.Content>
+                <StackPanel>
+                    <TextBlock Text="After changing settings, restart the app" />
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
+                    <Label Content="Hotkey" />
+                    <TextBox Text="{Binding HotKey}" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    <Label Content="Hotkey Alt" Grid.Row="1"/>
+                    <CheckBox IsChecked="{Binding HotKeyAlt}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"></CheckBox>
+                    <Label Content="Hotkey ctrl" Grid.Row="2"/>
+                    <CheckBox IsChecked="{Binding HotKeyCtrl}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"></CheckBox>
+                    <Label Content="Hotkey Shift" Grid.Row="3"/>
+                    <CheckBox IsChecked="{Binding HotKeyShift}" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center"></CheckBox>
                 </Grid>
+                </StackPanel>
             </TabItem.Content>
         </TabItem>
         <TabItem Header="FontSize">

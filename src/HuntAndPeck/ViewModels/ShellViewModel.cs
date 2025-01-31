@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using HuntAndPeck.NativeMethods;
+using HuntAndPeck.Properties;
 using HuntAndPeck.Services.Interfaces;
 using Application = System.Windows.Application;
 
@@ -32,16 +33,27 @@ namespace HuntAndPeck.ViewModels
             _hintProviderService = hintProviderService;
             _debugHintProviderService = debugHintProviderService;
 
+            KeyModifier hotKeyMod = 0;
+
+            if (Settings.Default.HotKeyAlt)
+                hotKeyMod |= KeyModifier.Alt;
+
+            if (Settings.Default.HotKeyCtrl)
+                hotKeyMod |= KeyModifier.Control;
+
+            if (Settings.Default.HotKeyShift)
+                hotKeyMod |= KeyModifier.Shift;
+
             keyListener1.HotKey = new HotKey
             {
-                Keys = Keys.F13,
-                Modifier = KeyModifier.Alt
+                Keys = (Keys)Convert.ToInt32(Settings.Default.HotKey, 16),
+                Modifier = hotKeyMod
             };
 
             keyListener1.TaskbarHotKey = new HotKey
             {
-                Keys = Keys.F13,
-                Modifier = KeyModifier.Control
+                Keys = (Keys)Convert.ToInt32(Settings.Default.TaskBarHotKey, 16),
+                Modifier = KeyModifier.Control | KeyModifier.Alt
             };
 
 #if DEBUG
