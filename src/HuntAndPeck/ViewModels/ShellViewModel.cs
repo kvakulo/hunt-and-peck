@@ -38,7 +38,6 @@ namespace HuntAndPeck.ViewModels
             int keyValue = 0x20;
             string hotKeyString = Settings.Default.HotKey.StartsWith("0x") ? Settings.Default.HotKey.Substring(2) : Settings.Default.HotKey;
             int.TryParse(hotKeyString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out keyValue);
-
             keyListener1.HotKey = new HotKey
             {
                 Keys = (Keys)keyValue,
@@ -113,6 +112,10 @@ namespace HuntAndPeck.ViewModels
         {
             KeyModifier modifier = 0;
 
+        private KeyModifier GetKeyModifier(bool alt, bool ctrl, bool shift, bool windows = false)
+        {
+            KeyModifier modifier = 0;
+
             if (alt)
                 modifier |= KeyModifier.Alt;
 
@@ -182,4 +185,5 @@ namespace HuntAndPeck.ViewModels
             _showOptions(vm);
         }
     }
+}
 }
