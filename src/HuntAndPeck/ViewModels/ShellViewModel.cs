@@ -108,9 +108,7 @@ namespace HuntAndPeck.ViewModels
             ShowOptionsCommand = new DelegateCommand(ShowOptions);
             ExitCommand = new DelegateCommand(Exit);
         }
-        private KeyModifier GetKeyModifier(bool alt, bool ctrl, bool shift, bool windows = false)
-        {
-            KeyModifier modifier = 0;
+
 
         private KeyModifier GetKeyModifier(bool alt, bool ctrl, bool shift, bool windows = false)
         {
@@ -186,4 +184,4 @@ namespace HuntAndPeck.ViewModels
         }
     }
 }
-}
+
