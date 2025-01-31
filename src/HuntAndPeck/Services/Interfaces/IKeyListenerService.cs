@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using HuntAndPeck.NativeMethods;
 
@@ -8,6 +9,7 @@ namespace HuntAndPeck.Services.Interfaces
     {
         public KeyModifier Modifier { get; set; }
         public Keys Keys { get; set; }
+        public int Level { get; set; } = -1;
 
         /// <summary>
         /// Id of the hot key registration
@@ -21,13 +23,11 @@ namespace HuntAndPeck.Services.Interfaces
     internal interface IKeyListenerService
     {
         event EventHandler OnHotKeyActivated;
-        event EventHandler OnHotKeyLevel1Activated;
-        event EventHandler OnHotKeyLevel2Activated;
+        event EventHandler OnHotKeyLeveledActivated;
         event EventHandler OnTaskbarHotKeyActivated;
         event EventHandler OnDebugHotKeyActivated;
 
-        HotKey HotKeyLevel1 { get; set; }
-        HotKey HotKeyLevel2 { get; set; }
+        IEnumerable<HotKey> LeveledHotKeys { get; set; }
         HotKey TaskbarHotKey { get; set; }
         HotKey HotKey { get; set; }
         HotKey DebugHotKey { get; set; }

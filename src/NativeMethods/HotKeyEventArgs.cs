@@ -7,11 +7,13 @@ namespace HuntAndPeck.NativeMethods
     {
         public readonly Keys Key;
         public readonly KeyModifier Modifiers;
+        public int Level = -1;
 
-        public HotKeyEventArgs(Keys key, KeyModifier modifiers)
+        public HotKeyEventArgs(Keys key, KeyModifier modifiers, int level)
         {
             Key = key;
             Modifiers = modifiers;
+            Level = level;
         }
 
         public HotKeyEventArgs(IntPtr hotKeyParam)

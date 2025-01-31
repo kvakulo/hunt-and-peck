@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using HuntAndPeck.NativeMethods;
 using HuntAndPeck.Services.Interfaces;
@@ -34,20 +35,49 @@ namespace HuntAndPeck.ViewModels
 
             keyListener1.HotKey = new HotKey
             {
-                Keys = Keys.T,
-                Modifier = KeyModifier.Alt
-            };
-
-            keyListener1.HotKeyLevel1 = new HotKey
-            {
                 Keys = Keys.U,
                 Modifier = KeyModifier.Alt
             };
 
-            keyListener1.HotKeyLevel2 = new HotKey
+            keyListener1.LeveledHotKeys = new List<HotKey>
             {
-                Keys = Keys.I,
-                Modifier = KeyModifier.Alt
+                new HotKey
+                {
+                    Keys = Keys.Q,
+                    Modifier = KeyModifier.Alt,
+                    Level = 1
+                },
+                new HotKey
+                {
+                    Keys = Keys.W,
+                    Modifier = KeyModifier.Alt,
+                    Level = 2
+                },
+                new HotKey
+                {
+                    Keys = Keys.E,
+                    Modifier = KeyModifier.Alt,
+                    Level = 3
+                },
+                new HotKey
+                {
+                    Keys = Keys.R,
+                    Modifier = KeyModifier.Alt,
+                    Level = 4
+                },
+                new HotKey
+                {
+                    Keys = Keys.T,
+                    Modifier = KeyModifier.Alt,
+                    Level = 5
+                },
+                new HotKey
+                {
+                    Keys = Keys.Y,
+                    Modifier = KeyModifier.Alt,
+                    Level = 6
+                }
+
             };
 
             keyListener1.TaskbarHotKey = new HotKey
@@ -64,8 +94,7 @@ namespace HuntAndPeck.ViewModels
             };
 #endif
             keyListener1.OnHotKeyActivated += _keyListener_OnHotKeyActivated;
-            keyListener1.OnHotKeyLevel1Activated += _keyListener_OnHotKeyLevel1Activated;
-            keyListener1.OnHotKeyLevel2Activated += _keyListener_OnHotKeyLevel2Activated;
+            keyListener1.OnHotKeyLeveledActivated += _keyListener_OnHotKeyLeveledActivated;
             keyListener1.OnTaskbarHotKeyActivated += _keyListener_OnTaskbarHotKeyActivated;
             keyListener1.OnDebugHotKeyActivated += _keyListener_OnDebugHotKeyActivated;
 
@@ -79,7 +108,6 @@ namespace HuntAndPeck.ViewModels
         private void _keyListener_OnHotKeyActivated(object sender, EventArgs e)
         {
             var session = _hintProviderService.EnumHints();
-            var key = ((HotKeyEventArgs)e).Key;
             if (session != null)
             {
                 var vm = new OverlayViewModel(session, _hintLabelService);
@@ -87,19 +115,9 @@ namespace HuntAndPeck.ViewModels
             }
         }
 
-        private void _keyListener_OnHotKeyLevel1Activated(object sender, EventArgs e)
+        private void _keyListener_OnHotKeyLeveledActivated(object sender, EventArgs e)
         {
-            var session = _hintProviderService.EnumHints(1);
-            if (session != null)
-            {
-                var vm = new OverlayViewModel(session, _hintLabelService);
-                _showOverlay(vm);
-            }
-        }
-
-        private void _keyListener_OnHotKeyLevel2Activated(object sender, EventArgs e)
-        {
-            var session = _hintProviderService.EnumHints(2);
+            var session = _hintProviderService.EnumHints(((HotKeyEventArgs)e).Level);
             if (session != null)
             {
                 var vm = new OverlayViewModel(session, _hintLabelService);
