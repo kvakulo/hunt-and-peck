@@ -17,8 +17,23 @@
     <Setting Name="HotKeyAlt" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="TaskBarHotKey" Type="System.String" Scope="User">
+    <Setting Name="TaskbarHotKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">0xD</Value>
+    </Setting>
+    <Setting Name="TaskbarHotKeyShift" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="TaskbarHotKeyCtrl" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="TaskbarHotKeyAlt" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="HotKeyWin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="TaskbarHotKeyWin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

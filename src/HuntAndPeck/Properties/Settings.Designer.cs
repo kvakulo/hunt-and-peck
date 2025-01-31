@@ -37,7 +37,7 @@ namespace HuntAndPeck.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0x7C")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0x20")]
         public string HotKey {
             get {
                 return ((string)(this["HotKey"]));
@@ -61,7 +61,7 @@ namespace HuntAndPeck.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool HotKeyCtrl {
             get {
                 return ((bool)(this["HotKeyCtrl"]));
@@ -82,16 +82,80 @@ namespace HuntAndPeck.Properties {
                 this["HotKeyAlt"] = value;
             }
         }
+
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HotKeyWin
+        {
+            get
+            {
+                return ((bool)(this["HotKeyWin"]));
+            }
+            set
+            {
+                this["HotKeyWin"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0xD")]
+        public string TaskbarHotKey {
+            get {
+                return ((string)(this["TaskbarHotKey"]));
+            }
+            set {
+                this["TaskbarHotKey"] = value;
+            }
+        }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0x7C")]
-        public string TaskBarHotKey {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TaskbarHotKeyShift {
             get {
-                return ((string)(this["TaskBarHotKey"]));
+                return ((bool)(this["TaskbarHotKeyShift"]));
             }
             set {
-                this["TaskBarHotKey"] = value;
+                this["TaskbarHotKeyShift"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TaskbarHotKeyCtrl {
+            get {
+                return ((bool)(this["TaskbarHotKeyCtrl"]));
+            }
+            set {
+                this["TaskbarHotKeyCtrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TaskbarHotKeyAlt {
+            get {
+                return ((bool)(this["TaskbarHotKeyAlt"]));
+            }
+            set {
+                this["TaskbarHotKeyAlt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TaskbarHotKeyWin {
+            get {
+                return ((bool)(this["TaskbarHotKeyWin"]));
+            }
+            set {
+                this["TaskbarHotKeyWin"] = value;
             }
         }
     }
