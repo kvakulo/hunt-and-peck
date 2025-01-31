@@ -34,25 +34,38 @@ namespace HuntAndPeck.ViewModels
 
             keyListener1.HotKey = new HotKey
             {
-                Keys = Keys.OemSemicolon,
+                Keys = Keys.T,
+                Modifier = KeyModifier.Alt
+            };
+
+            keyListener1.HotKeyLevel1 = new HotKey
+            {
+                Keys = Keys.U,
+                Modifier = KeyModifier.Alt
+            };
+
+            keyListener1.HotKeyLevel2 = new HotKey
+            {
+                Keys = Keys.I,
                 Modifier = KeyModifier.Alt
             };
 
             keyListener1.TaskbarHotKey = new HotKey
             {
-                Keys = Keys.OemSemicolon,
+                Keys = Keys.Y,
                 Modifier = KeyModifier.Control
             };
 
 #if DEBUG
             keyListener1.DebugHotKey = new HotKey
             {
-                Keys = Keys.OemSemicolon,
+                Keys = Keys.Y,
                 Modifier = KeyModifier.Alt | KeyModifier.Shift
             };
 #endif
-
             keyListener1.OnHotKeyActivated += _keyListener_OnHotKeyActivated;
+            keyListener1.OnHotKeyLevel1Activated += _keyListener_OnHotKeyLevel1Activated;
+            keyListener1.OnHotKeyLevel2Activated += _keyListener_OnHotKeyLevel2Activated;
             keyListener1.OnTaskbarHotKeyActivated += _keyListener_OnTaskbarHotKeyActivated;
             keyListener1.OnDebugHotKeyActivated += _keyListener_OnDebugHotKeyActivated;
 
@@ -66,6 +79,27 @@ namespace HuntAndPeck.ViewModels
         private void _keyListener_OnHotKeyActivated(object sender, EventArgs e)
         {
             var session = _hintProviderService.EnumHints();
+            var key = ((HotKeyEventArgs)e).Key;
+            if (session != null)
+            {
+                var vm = new OverlayViewModel(session, _hintLabelService);
+                _showOverlay(vm);
+            }
+        }
+
+        private void _keyListener_OnHotKeyLevel1Activated(object sender, EventArgs e)
+        {
+            var session = _hintProviderService.EnumHints(1);
+            if (session != null)
+            {
+                var vm = new OverlayViewModel(session, _hintLabelService);
+                _showOverlay(vm);
+            }
+        }
+
+        private void _keyListener_OnHotKeyLevel2Activated(object sender, EventArgs e)
+        {
+            var session = _hintProviderService.EnumHints(2);
             if (session != null)
             {
                 var vm = new OverlayViewModel(session, _hintLabelService);
@@ -76,7 +110,7 @@ namespace HuntAndPeck.ViewModels
         private void _keyListener_OnTaskbarHotKeyActivated(object sender, EventArgs e)
         {
             var taskbarHWnd = User32.FindWindow("Shell_traywnd", "");
-            var session = _hintProviderService.EnumHints(taskbarHWnd);
+            var session = _hintProviderService.EnumHints(taskbarHWnd, -1);
             if (session != null)
             {
                 var vm = new OverlayViewModel(session, _hintLabelService);

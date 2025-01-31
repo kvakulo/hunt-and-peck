@@ -21,9 +21,13 @@ namespace HuntAndPeck.Services.Interfaces
     internal interface IKeyListenerService
     {
         event EventHandler OnHotKeyActivated;
+        event EventHandler OnHotKeyLevel1Activated;
+        event EventHandler OnHotKeyLevel2Activated;
         event EventHandler OnTaskbarHotKeyActivated;
         event EventHandler OnDebugHotKeyActivated;
 
+        HotKey HotKeyLevel1 { get; set; }
+        HotKey HotKeyLevel2 { get; set; }
         HotKey TaskbarHotKey { get; set; }
         HotKey HotKey { get; set; }
         HotKey DebugHotKey { get; set; }

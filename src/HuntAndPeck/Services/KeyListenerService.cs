@@ -10,6 +10,8 @@ namespace HuntAndPeck.Services
         public event EventHandler OnHotKeyActivated;
         public event EventHandler OnTaskbarHotKeyActivated;
         public event EventHandler OnDebugHotKeyActivated;
+        public event EventHandler OnHotKeyLevel1Activated;
+        public event EventHandler OnHotKeyLevel2Activated;
 
         /// <summary>
         /// Global counter for assigning ids to identiy the hot key registration
@@ -17,6 +19,9 @@ namespace HuntAndPeck.Services
         private int _hotkeyIdCounter = 0;
 
         private HotKey _hotKey;
+
+        private HotKey _hotKeyLevel1;
+        private HotKey _hotKeyLevel2;
         private HotKey _taskbarHotKey;
         private HotKey _debugHotKey;
 
@@ -82,6 +87,31 @@ namespace HuntAndPeck.Services
             }
         }
 
+        public HotKey HotKeyLevel1
+        {
+            get
+            {
+                return _hotKeyLevel1;
+            }
+            set
+            {
+                _hotKeyLevel1 = value;
+                ReRegisterHotKey(_hotKeyLevel1);
+            }
+        }
+        public HotKey HotKeyLevel2
+        {
+            get
+            {
+                return _hotKeyLevel2;
+            }
+            set
+            {
+                _hotKeyLevel2 = value;
+                ReRegisterHotKey(_hotKeyLevel2);
+            }
+        }
+
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == Constants.WM_HOTKEY)
@@ -95,6 +125,24 @@ namespace HuntAndPeck.Services
                     OnHotKeyActivated != null)
                 {
                     OnHotKeyActivated(this, new EventArgs());
+                }
+
+                // Hotkey level1
+                if (_hotKeyLevel1 != null &&
+                    e.Key == _hotKeyLevel1.Keys &&
+                    e.Modifiers == _hotKeyLevel1.Modifier &&
+                    OnHotKeyLevel1Activated != null)
+                {
+                    OnHotKeyLevel1Activated(this, new EventArgs());
+                }
+
+                // Hotkey level2
+                if (_hotKeyLevel2 != null &&
+                    e.Key == _hotKeyLevel2.Keys &&
+                    e.Modifiers == _hotKeyLevel2.Modifier &&
+                    OnHotKeyLevel2Activated != null)
+                {
+                    OnHotKeyLevel2Activated(this, new EventArgs());
                 }
 
                 // Task bar hotkey

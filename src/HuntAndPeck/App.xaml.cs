@@ -61,7 +61,7 @@ namespace HuntAndPeck
             {
                 // support headless tray mode
                 var taskbarHWnd = User32.FindWindow("Shell_traywnd", "");
-                var session = _hintProviderService.EnumHints(taskbarHWnd);
+                var session = _hintProviderService.EnumHints(taskbarHWnd, 0);
                 var overlayWindow = new OverlayView()
                 {
                     DataContext = new OverlayViewModel(session, _hintLabelService)
