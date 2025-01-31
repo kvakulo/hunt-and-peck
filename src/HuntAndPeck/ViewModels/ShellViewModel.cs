@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
@@ -43,6 +44,47 @@ namespace HuntAndPeck.ViewModels
                 Modifier = GetKeyModifier(Settings.Default.HotKeyAlt, Settings.Default.HotKeyCtrl, Settings.Default.HotKeyShift, Settings.Default.HotKeyWin)
             };
 
+            keyListener1.LeveledHotKeys = new List<HotKey>
+            {
+                new HotKey
+                {
+                    Keys = Keys.Q,
+                    Modifier = KeyModifier.Alt,
+                    Level = 1
+                },
+                new HotKey
+                {
+                    Keys = Keys.W,
+                    Modifier = KeyModifier.Alt,
+                    Level = 2
+                },
+                new HotKey
+                {
+                    Keys = Keys.E,
+                    Modifier = KeyModifier.Alt,
+                    Level = 3
+                },
+                new HotKey
+                {
+                    Keys = Keys.R,
+                    Modifier = KeyModifier.Alt,
+                    Level = 4
+                },
+                new HotKey
+                {
+                    Keys = Keys.T,
+                    Modifier = KeyModifier.Alt,
+                    Level = 5
+                },
+                new HotKey
+                {
+                    Keys = Keys.Y,
+                    Modifier = KeyModifier.Alt,
+                    Level = 6
+                }
+
+            };
+
             string taskbarHotKeyString = Settings.Default.TaskbarHotKey.StartsWith("0x") ? Settings.Default.TaskbarHotKey.Substring(2) : Settings.Default.TaskbarHotKey;
             int.TryParse(taskbarHotKeyString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out keyValue);
             keyListener1.TaskbarHotKey = new HotKey
@@ -54,18 +96,19 @@ namespace HuntAndPeck.ViewModels
 #if DEBUG
             keyListener1.DebugHotKey = new HotKey
             {
-                Keys = Keys.OemSemicolon,
+                Keys = Keys.Y,
                 Modifier = KeyModifier.Alt | KeyModifier.Shift
             };
 #endif
-
             keyListener1.OnHotKeyActivated += _keyListener_OnHotKeyActivated;
+            keyListener1.OnHotKeyLeveledActivated += _keyListener_OnHotKeyLeveledActivated;
             keyListener1.OnTaskbarHotKeyActivated += _keyListener_OnTaskbarHotKeyActivated;
             keyListener1.OnDebugHotKeyActivated += _keyListener_OnDebugHotKeyActivated;
 
             ShowOptionsCommand = new DelegateCommand(ShowOptions);
             ExitCommand = new DelegateCommand(Exit);
         }
+
 
         private KeyModifier GetKeyModifier(bool alt, bool ctrl, bool shift, bool windows = false)
         {
@@ -85,7 +128,6 @@ namespace HuntAndPeck.ViewModels
 
             return modifier;
         }
-
         public DelegateCommand ShowOptionsCommand { get; }
         public DelegateCommand ExitCommand { get; }
 
@@ -99,10 +141,20 @@ namespace HuntAndPeck.ViewModels
             }
         }
 
+        private void _keyListener_OnHotKeyLeveledActivated(object sender, EventArgs e)
+        {
+            var session = _hintProviderService.EnumHints(((HotKeyEventArgs)e).Level);
+            if (session != null)
+            {
+                var vm = new OverlayViewModel(session, _hintLabelService);
+                _showOverlay(vm);
+            }
+        }
+
         private void _keyListener_OnTaskbarHotKeyActivated(object sender, EventArgs e)
         {
             var taskbarHWnd = User32.FindWindow("Shell_traywnd", "");
-            var session = _hintProviderService.EnumHints(taskbarHWnd);
+            var session = _hintProviderService.EnumHints(taskbarHWnd, -1);
             if (session != null)
             {
                 var vm = new OverlayViewModel(session, _hintLabelService);
@@ -132,3 +184,4 @@ namespace HuntAndPeck.ViewModels
         }
     }
 }
+

@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Forms;
 using HuntAndPeck.Services.Interfaces;
+using System.Collections.Generic;
 
 namespace HuntAndPeck.Services
 {
@@ -10,6 +11,7 @@ namespace HuntAndPeck.Services
         public event EventHandler OnHotKeyActivated;
         public event EventHandler OnTaskbarHotKeyActivated;
         public event EventHandler OnDebugHotKeyActivated;
+        public event EventHandler OnHotKeyLeveledActivated;
 
         /// <summary>
         /// Global counter for assigning ids to identiy the hot key registration
@@ -17,6 +19,7 @@ namespace HuntAndPeck.Services
         private int _hotkeyIdCounter = 0;
 
         private HotKey _hotKey;
+        private IEnumerable<HotKey> _leveledHotKeys;
         private HotKey _taskbarHotKey;
         private HotKey _debugHotKey;
 
@@ -49,6 +52,26 @@ namespace HuntAndPeck.Services
             {
                 _hotKey = value;
                 ReRegisterHotKey(_hotKey);
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the current hotkey
+        /// </summary>
+        /// <remarks>Changing this will cause the current hotkey to be unregistered</remarks>
+        public IEnumerable<HotKey> LeveledHotKeys
+        {
+            get
+            {
+                return _leveledHotKeys;
+            }
+            set
+            {
+                _leveledHotKeys = value;
+                foreach(var key in _leveledHotKeys)
+                {
+                    ReRegisterHotKey(key);
+                }
             }
         }
 
@@ -95,6 +118,16 @@ namespace HuntAndPeck.Services
                     OnHotKeyActivated != null)
                 {
                     OnHotKeyActivated(this, new EventArgs());
+                }
+                foreach (var hotKey in _leveledHotKeys)
+                {
+                    if (hotKey != null &&
+                        e.Key == hotKey.Keys &&
+                        e.Modifiers == hotKey.Modifier &&
+                        OnHotKeyLeveledActivated != null)
+                    {
+                        OnHotKeyLeveledActivated(this, new HotKeyEventArgs(hotKey.Keys, hotKey.Modifier, hotKey.Level));
+                    }
                 }
 
                 // Task bar hotkey

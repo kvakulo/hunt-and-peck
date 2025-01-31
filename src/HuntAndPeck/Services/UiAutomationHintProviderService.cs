@@ -4,6 +4,7 @@ using HuntAndPeck.NativeMethods;
 using HuntAndPeck.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -22,14 +23,24 @@ namespace HuntAndPeck.Services
             {
                 return null;
             }
-            return EnumHints(foregroundWindow);
+            return EnumHints(foregroundWindow, -1);
         }
 
-        public HintSession EnumHints(IntPtr hWnd)
+        public HintSession EnumHints(int levels)
+        {
+            var foregroundWindow = User32.GetForegroundWindow();
+            if (foregroundWindow == IntPtr.Zero)
+            {
+                return null;
+            }
+            return EnumHints(foregroundWindow, levels);
+        }
+
+        public HintSession EnumHints(IntPtr hWnd, int levels)
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var session = EnumWindowHints(hWnd, CreateHint);
+            var session = EnumWindowHints(hWnd, CreateHint, levels);
             sw.Stop();
 
             Debug.WriteLine("Enumeration of hints took {0} ms", sw.ElapsedMilliseconds);
@@ -57,10 +68,10 @@ namespace HuntAndPeck.Services
         /// <param name="hWnd">The window to get hints from</param>
         /// <param name="hintFactory">The factory to use to create each hint in the session</param>
         /// <returns>A hint session</returns>
-        private HintSession EnumWindowHints(IntPtr hWnd, Func<IntPtr, Rect, IUIAutomationElement, Hint> hintFactory)
+        private HintSession EnumWindowHints(IntPtr hWnd, Func<IntPtr, Rect, IUIAutomationElement, Hint> hintFactory, int levels = -1)
         {
             var result = new List<Hint>();
-            var elements = EnumElements(hWnd);
+            var elements = EnumElements(hWnd, levels);
 
             // Window bounds
             var rawWindowBounds = new RECT();
@@ -100,9 +111,8 @@ namespace HuntAndPeck.Services
         /// </summary>
         /// <param name="hWnd">The window handle</param>
         /// <returns>All of the automation elements found</returns>
-        private List<IUIAutomationElement> EnumElements(IntPtr hWnd)
+        private List<IUIAutomationElement> EnumElements(IntPtr hWnd, int levels)
         {
-            var result = new List<IUIAutomationElement>();
             var automationElement = _automation.ElementFromHandle(hWnd);
 
             var conditionControlView = _automation.ControlViewCondition;
@@ -112,16 +122,49 @@ namespace HuntAndPeck.Services
             var conditionOnScreen = _automation.CreatePropertyCondition(UIA_PropertyIds.UIA_IsOffscreenPropertyId, false);
             var condition = _automation.CreateAndCondition(enabledControlCondition, conditionOnScreen);
 
-            var elementArray = automationElement.FindAll(TreeScope.TreeScope_Descendants, condition);
-            if (elementArray != null)
+            return RetrieveLeafElements(automationElement, condition, levels);
+        }
+
+
+
+        private List<IUIAutomationElement> RetrieveLeafElements(IUIAutomationElement element, IUIAutomationCondition condition, int levels)
+        {
+            var result = new List<IUIAutomationElement>();
+            if (levels == -1)
+            {
+                var all = element.FindAll(TreeScope.TreeScope_Descendants, condition);
+                result.AddRange(automationElementsToList(all));
+            }
+            if (levels <= 0) return result;
+
+            var elementArray = element.FindAll(TreeScope.TreeScope_Children, condition);
+            if (levels == 1)
+            {
+                result.AddRange(automationElementsToList(elementArray));
+            }
+            else
             {
                 for (var i = 0; i < elementArray.Length; ++i)
                 {
-                    result.Add(elementArray.GetElement(i));
+                    var child = elementArray.GetElement(i);
+
+                    // Recursively retrieve children of the current child element
+                    result.AddRange(RetrieveLeafElements(child, condition, levels - 1));
                 }
             }
 
             return result;
+        }
+
+
+        private List<IUIAutomationElement> automationElementsToList(IUIAutomationElementArray elements)
+        {
+            List<IUIAutomationElement> listElements = new List<IUIAutomationElement>();
+            for (int i = 0; i < elements.Length; i++)
+            {
+                listElements.Add(elements.GetElement(i));
+            }
+            return listElements;
         }
 
         /// <summary>
@@ -146,14 +189,14 @@ namespace HuntAndPeck.Services
                 {
                     return new UiAutomationToggleHint(owningWindow, togglePattern, hintBounds);
                 }
-                
-                var selectPattern = (IUIAutomationSelectionItemPattern) automationElement.GetCurrentPattern(UIA_PatternIds.UIA_SelectionItemPatternId);
+
+                var selectPattern = (IUIAutomationSelectionItemPattern)automationElement.GetCurrentPattern(UIA_PatternIds.UIA_SelectionItemPatternId);
                 if (selectPattern != null)
                 {
                     return new UiAutomationSelectHint(owningWindow, selectPattern, hintBounds);
                 }
 
-                var expandCollapsePattern = (IUIAutomationExpandCollapsePattern) automationElement.GetCurrentPattern(UIA_PatternIds.UIA_ExpandCollapsePatternId);
+                var expandCollapsePattern = (IUIAutomationExpandCollapsePattern)automationElement.GetCurrentPattern(UIA_PatternIds.UIA_ExpandCollapsePatternId);
                 if (expandCollapsePattern != null)
                 {
                     return new UiAutomationExpandCollapseHint(owningWindow, expandCollapsePattern, hintBounds);
@@ -165,12 +208,12 @@ namespace HuntAndPeck.Services
                     return new UiAutomationFocusHint(owningWindow, automationElement, hintBounds);
                 }
 
-                var rangeValuePattern = (IUIAutomationRangeValuePattern) automationElement.GetCurrentPattern(UIA_PatternIds.UIA_RangeValuePatternId);
+                var rangeValuePattern = (IUIAutomationRangeValuePattern)automationElement.GetCurrentPattern(UIA_PatternIds.UIA_RangeValuePatternId);
                 if (rangeValuePattern != null && rangeValuePattern.CurrentIsReadOnly == 0)
                 {
                     return new UiAutomationFocusHint(owningWindow, automationElement, hintBounds);
                 }
-                
+
                 return null;
             }
             catch (Exception)
@@ -197,7 +240,7 @@ namespace HuntAndPeck.Services
                 try
                 {
                     var pattern = automationElement.GetCurrentPattern(pn.Key);
-                    if(pattern != null)
+                    if (pattern != null)
                     {
                         programmaticNames.Add(pn.Value);
                     }
