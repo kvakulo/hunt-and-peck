@@ -92,6 +92,7 @@
     <Compile Include="Models\Hint.cs" />
     <Compile Include="Models\HintSession.cs" />
     <Compile Include="Models\UiAutomationExpandCollapseHint.cs" />
+    <Compile Include="Models\UiAutomationScrollHint.cs" />
     <Compile Include="Models\UiAutomationFocusHint.cs" />
     <Compile Include="Models\UiAutomationInvokeHint.cs" />
     <Compile Include="Models\UiAutomationSelectHint.cs" />

@@ -9,7 +9,7 @@ namespace HuntAndPeck.Models
         /// <summary>
         /// The hints
         /// </summary>
-        public IList<Hint> Hints { get; set; }
+        public IList<Hint> Hints { get; set; }     
 
         /// <summary>
         /// Owning window for the hints

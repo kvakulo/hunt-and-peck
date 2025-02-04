@@ -8,5 +8,6 @@ namespace HuntAndPeck.Services.Interfaces
         /// Generate N labels
         /// </summary>
         IList<string> GetHintStrings(int count);
+        IList<string> GetScrollHintStrings(int count);
     }
 }

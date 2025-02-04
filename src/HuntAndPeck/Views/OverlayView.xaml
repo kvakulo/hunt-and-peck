@@ -54,7 +54,7 @@
                                  Width="{Binding Hint.BoundingRectangle.Width}"
                                  Height="{Binding Hint.BoundingRectangle.Height}"
                                  Style="{StaticResource HintStyle}">
-                            <Border CornerRadius="5" BorderThickness="2" BorderBrush="Black" Background="Yellow">
+                            <Border CornerRadius="5" BorderThickness="2" BorderBrush="Black" Background="{Binding BackGroundColor}">
                                 <TextBlock Text="{Binding Label}" 
                                        FontFamily="Helvetica, Arial"
                                        FontWeight="Bold"
