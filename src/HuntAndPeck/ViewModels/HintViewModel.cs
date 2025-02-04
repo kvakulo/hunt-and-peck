@@ -1,5 +1,6 @@
 ﻿using HuntAndPeck.Models;
 using HuntAndPeck.Properties;
+using System.Drawing;
 
 namespace HuntAndPeck.ViewModels
 {
@@ -13,6 +14,11 @@ namespace HuntAndPeck.ViewModels
         {
             Hint = hint;
             FontSizeReadValue = Settings.Default.FontSize;
+        }
+
+        public string BackGroundColor
+        {
+            get { return Hint is UiAutomationScrollHint ? "Red" : "Yellow"; }
         }
 
         public Hint Hint { get; set; }

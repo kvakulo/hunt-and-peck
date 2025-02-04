@@ -67,6 +67,7 @@ namespace HuntAndPeck.Services
         /// </summary>
         /// <param name="hWnd">The window to get hints from</param>
         /// <param name="hintFactory">The factory to use to create each hint in the session</param>
+        /// <param name="scrollHintFactory">The factory to use to create each  scroll hint in the session</param>
         /// <returns>A hint session</returns>
         private HintSession EnumWindowHints(IntPtr hWnd, Func<IntPtr, Rect, IUIAutomationElement, Hint> hintFactory, int levels = -1)
         {
@@ -168,6 +169,36 @@ namespace HuntAndPeck.Services
         }
 
         /// <summary>
+        /// Enumerates the automation elements from the given window
+        /// </summary>
+        /// <param name="hWnd">The window handle</param>
+        /// <returns>All of the automation elements found</returns>
+        private List<IUIAutomationElement> EnumScrollbars(IntPtr hWnd)
+        {
+            var result = new List<IUIAutomationElement>();
+            var automationElement = _automation.ElementFromHandle(hWnd);
+
+            var conditionControlView = _automation.ControlViewCondition;
+            var conditionEnabled = _automation.CreatePropertyCondition(UIA_PropertyIds.UIA_IsEnabledPropertyId, true);
+            var isScrollbarCondition = _automation.CreatePropertyCondition(UIA_PropertyIds.UIA_IsScrollPatternAvailablePropertyId, true);
+            var enabledScrollBarCondition = _automation.CreateAndConditionFromArray(new IUIAutomationCondition[] { conditionControlView, conditionEnabled, isScrollbarCondition });
+
+            var conditionOnScreen = _automation.CreatePropertyCondition(UIA_PropertyIds.UIA_IsOffscreenPropertyId, false);
+            var condition = _automation.CreateAndCondition(enabledScrollBarCondition, conditionOnScreen);
+
+            var elementArray = automationElement.FindAll(TreeScope.TreeScope_Descendants, condition);
+            if (elementArray != null)
+            {
+                for (var i = 0; i < elementArray.Length; ++i)
+                {
+                    result.Add(elementArray.GetElement(i));
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Creates a UI Automation element from the given automation element
         /// </summary>
         /// <param name="owningWindow">The owning window</param>
@@ -182,6 +213,12 @@ namespace HuntAndPeck.Services
                 if (invokePattern != null)
                 {
                     return new UiAutomationInvokeHint(owningWindow, invokePattern, hintBounds);
+                }
+
+                var scrollPattern = (IUIAutomationScrollPattern)automationElement.GetCurrentPattern(UIA_PatternIds.Uia_);
+                if (scrollPattern != null)
+                {
+                    return new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds);
                 }
 
                 var togglePattern = (IUIAutomationTogglePattern)automationElement.GetCurrentPattern(UIA_PatternIds.UIA_TogglePatternId);
@@ -222,6 +259,42 @@ namespace HuntAndPeck.Services
                 return null;
             }
         }
+
+
+        ///// <summary>
+        ///// Creates a UI Automation element from the given automation element
+        ///// </summary>
+        ///// <param name="owningWindow">The owning window</param>
+        ///// <param name="hintBounds">The hint bounds</param>
+        ///// <param name="automationElement">The associated automation element</param>
+        ///// <returns>The created hint, else null if the hint could not be created</returns>
+        //private List<Hint> CreateScrollHint(IntPtr owningWindow, Rect hintBounds, IUIAutomationElement automationElement)
+        //{
+        //    try
+        //    {
+        //        var scrollPattern = (IUIAutomationScrollPattern)automationElement.GetCurrentPattern(UIA_PatternIds.UIA_ScrollPatternId);
+        //        if (scrollPattern != null)
+        //            return new List<Hint>() {
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 1),
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 2),
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 3),
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 4),
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 5),
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 6),
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 7),
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 8),
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 9),
+        //                new UiAutomationScrollHint(owningWindow, scrollPattern, hintBounds, 10),
+        //            };
+
+        //        return null;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // May have gone
+        //        return null;
+        //    }
+        //}
 
         /// <summary>
         /// Creates a debug hint

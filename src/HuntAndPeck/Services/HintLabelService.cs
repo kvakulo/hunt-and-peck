@@ -51,6 +51,42 @@ namespace HuntAndPeck.Services
             return hintStrings.ToList();
         }
 
+        public IList<string> GetScrollHintStrings(int scrollHintCount)
+        {
+            var hintStrings = new List<string>();
+            if (scrollHintCount <= 0)
+            {
+                return hintStrings;
+            }
+
+            var hintCharacters = new[] { 'S', 'A', 'D', 'F', 'J', 'K', 'L', 'E', 'W', 'C', 'M', 'P', 'G', 'H' };
+            var digitsNeeded = (int)Math.Ceiling(Math.Log(scrollHintCount) / Math.Log(hintCharacters.Length));
+
+            var wholeHintCount = (int)Math.Pow(hintCharacters.Length, digitsNeeded);
+            var shortHintCount = (wholeHintCount - scrollHintCount) / hintCharacters.Length;
+            var longHintCount = scrollHintCount - shortHintCount;
+
+            var longHintPrefixCount = wholeHintCount / hintCharacters.Length - shortHintCount;
+            for (int i = 0, j = 0; i < longHintCount; ++i, ++j)
+            {
+                hintStrings.Add(new string(NumberToHintString(j, hintCharacters, digitsNeeded).Reverse().ToArray()));
+                if (longHintPrefixCount > 0 && (i + 1) % longHintPrefixCount == 0)
+                {
+                    j += shortHintCount;
+                }
+            }
+
+            if (digitsNeeded > 1)
+            {
+                for (var i = 0; i < shortHintCount; ++i)
+                {
+                    hintStrings.Add(new string(NumberToHintString(i + longHintPrefixCount, hintCharacters, digitsNeeded - 1).Reverse().ToArray()));
+                }
+            }
+
+            return hintStrings.ToList();
+        }
+
         /// <summary>
         /// Converts a number like "8" into a hint string like "JK". This is used to sequentially generate all of the
         /// hint text. The hint string will be "padded with zeroes" to ensure its length is >= numHintDigits.

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using HuntAndPeck.Models;
 using HuntAndPeck.Services.Interfaces;
+using System.Windows.Controls;
 
 namespace HuntAndPeck.ViewModels
 {
@@ -11,6 +12,7 @@ namespace HuntAndPeck.ViewModels
     {
         private Rect _bounds;
         private ObservableCollection<HintViewModel> _hints = new ObservableCollection<HintViewModel>();
+        private UiAutomationScrollHint _waitingForDecile;
 
         public OverlayViewModel(
             HintSession session,
@@ -69,17 +71,36 @@ namespace HuntAndPeck.ViewModels
                 {
                     x.Active = false;
                 }
-
+                
                 var matching = Hints.Where(x => x.Label.StartsWith(value, StringComparison.OrdinalIgnoreCase)).ToArray();
                 foreach (var x in matching)
                 {
                     x.Active = true;
                 }
 
+                if (_waitingForDecile != null)
+                {
+                    if (int.TryParse(value.Last().ToString(), out int decile))
+                    {
+                        _waitingForDecile.SetDecile(decile);
+                        _waitingForDecile.Invoke();
+                        CloseOverlay?.Invoke();
+                    }
+                }
+
                 if (matching.Count() == 1)
                 {
-                    matching.First().Hint.Invoke();
-                    CloseOverlay?.Invoke();
+                    var matchedHint = matching.First().Hint;
+
+                    if (matchedHint is UiAutomationScrollHint)
+                    {
+                        _waitingForDecile = matchedHint as UiAutomationScrollHint;
+                    }
+                    else
+                    {
+                        matching.First().Hint.Invoke();
+                        CloseOverlay?.Invoke();
+                    }
                 }
             }
         }
